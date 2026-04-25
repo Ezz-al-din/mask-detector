@@ -23,18 +23,21 @@ A production-ready, browser-based face mask detection system that runs **3 CNN m
 ## 🏗️ System Architecture
 
 ### 🔹 3 CNN Models (Ensemble)
-| Model | Parameters | Speed | Role |
-|-------|-----------|-------|------|
-| **MobileNetV2** | ~3.5M | ⚡⚡ Fast | Balanced speed/accuracy |
-| **EfficientNet-B0** | ~5.3M | ⚡ Medium | High accuracy backbone |
-| **Custom CNN** | ~0.5M | ⚡⚡⚡ Very Fast | Lightweight fallback |
+
+| Model               | Parameters | Speed            | Role                    |
+| ------------------- | ---------- | ---------------- | ----------------------- |
+| **MobileNetV2**     | ~3.5M      | ⚡⚡ Fast        | Balanced speed/accuracy |
+| **EfficientNet-B0** | ~5.3M      | ⚡ Medium        | High accuracy backbone  |
+| **Custom CNN**      | ~0.5M      | ⚡⚡⚡ Very Fast | Lightweight fallback    |
 
 ### 🔹 2-Class Classification
+
 - **Class 0**: `Mask` (person wearing face mask correctly)
 - **Class 1**: `No Mask` (person without mask or incorrect usage)
 
 ### 🔹 Ensemble Prediction Flow
 
+```bash
 Camera Frame → Center Crop → Resize to 224x224
 ↓
 ┌──────────────┬──────────────┬──────────────┐
@@ -45,7 +48,7 @@ Camera Frame → Center Crop → Resize to 224x224
 └──────┬───────┴──────┬───────┘
 ↓ AVERAGE ↓
 Final Prediction → Bounding Box Overlay
-
+```
 
 ---
 
@@ -81,11 +84,13 @@ mask-detector/
 ├── css/style.css # Styling
 └── js/app.js # WebSocket client & overlay
 ```
+
 ---
 
 ## 🚀 Quick Start
 
 ### 1️⃣ Clone & Install
+
 ```bash
 git clone https://github.com/yourusername/mask-detector.git
 cd mask-detector
@@ -96,13 +101,14 @@ pip install -r requirements.txt
 
 Place your images if you want to use another dataset in the `data/` folder exactly like this:
 
+```bash
 data/
 ├── with_mask/      # Add images of people wearing masks
 └── without_mask/   # Add images of people without masks
-
+```
 
 **Supported formats:** `.jpg`, `.jpeg`, `.png`  
-**Recommended:** 500+ images per class for reliable accuracy  
+**Recommended:** 500+ images per class for reliable accuracy
 
 ---
 
@@ -111,12 +117,13 @@ data/
 ```bash
 python run_all.py
 ```
+
 ### This script will:
 
-- ✅ **Prepare Dataset** – Shuffle, split 80/20 train/test, rename folders  
-- 🧠 **Train 3 Models** – MobileNetV2, EfficientNet-B0, Custom CNN (~10–15 min on CPU)  
-- 💾 **Save Weights** – Automatically saves `.pth` files to `models/`  
-- 🌐 **Start Server** – Launch Flask-SocketIO at http://localhost:5000  
+- ✅ **Prepare Dataset** – Shuffle, split 80/20 train/test, rename folders
+- 🧠 **Train 3 Models** – MobileNetV2, EfficientNet-B0, Custom CNN (~10–15 min on CPU)
+- 💾 **Save Weights** – Automatically saves `.pth` files to `models/`
+- 🌐 **Start Server** – Launch Flask-SocketIO at http://localhost:5000
 
 ---
 
@@ -130,16 +137,17 @@ Navigate to http://localhost:5000, click **"Start Camera"**, and allow webcam ac
 
 The `download_data.py` script does **not** download anything. It expects local folders and handles:
 
-- ✅ Validates `data/with_mask/` and `data/without_mask/` exist  
-- ✅ Shuffles images (`seed=42` for reproducibility)  
-- ✅ Splits 80% → `data/train/`, 20% → `data/test/`  
-- ✅ Renames classes to `mask` and `no_mask` (required for PyTorch `ImageFolder`)  
-- ✅ Leaves original folders untouched (non-destructive)  
+- ✅ Validates `data/with_mask/` and `data/without_mask/` exist
+- ✅ Shuffles images (`seed=42` for reproducibility)
+- ✅ Splits 80% → `data/train/`, 20% → `data/test/`
+- ✅ Renames classes to `mask` and `no_mask` (required for PyTorch `ImageFolder`)
+- ✅ Leaves original folders untouched (non-destructive)
 
 ---
 
 ## 📁 Expected Output Structure
 
+```bash
 data/
 ├── with_mask/        ← Your original images (kept)
 ├── without_mask/     ← Your original images (kept)
@@ -149,30 +157,32 @@ data/
 └── test/
     ├── mask/         [20% of mask images]
     └── no_mask/      [20% of no-mask images]
+```
 
 ---
+
 ## 🧠 Training Details
 
 ### ⚙️ Configuration
 
-| Parameter        | Value                                      |
-|------------------|--------------------------------------------|
-| Epochs           | 10                                         |
-| Batch Size       | 32                                         |
-| Optimizer        | Adam (lr = 0.001)                          |
-| Scheduler        | StepLR (decay 0.1 every 5 epochs)          |
-| Loss             | CrossEntropyLoss                           |
-| Input Size       | 224 × 224                                  |
-| Normalization    | ImageNet stats `[0.485, 0.456, 0.406]`     |
+| Parameter     | Value                                  |
+| ------------- | -------------------------------------- |
+| Epochs        | 10                                     |
+| Batch Size    | 32                                     |
+| Optimizer     | Adam (lr = 0.001)                      |
+| Scheduler     | StepLR (decay 0.1 every 5 epochs)      |
+| Loss          | CrossEntropyLoss                       |
+| Input Size    | 224 × 224                              |
+| Normalization | ImageNet stats `[0.485, 0.456, 0.406]` |
 
 ---
 
 ### 🔄 Data Augmentation (Train Only)
 
-- Random resized crop  
-- Random horizontal flip  
-- Color jitter (brightness & contrast ±20%)  
-- `.convert('RGB')` to fix PNG transparency/palette warnings  
+- Random resized crop
+- Random horizontal flip
+- Color jitter (brightness & contrast ±20%)
+- `.convert('RGB')` to fix PNG transparency/palette warnings
 
 ---
 
