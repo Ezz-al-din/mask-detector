@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>😷 Real-Time Mask Detector</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>😷 Live Mask Detection</h1>
+        <div class="video-wrapper">
+            <video id="video" autoplay playsinline style="display:none;"></video>
+            <canvas id="canvas" style="display:none;"></canvas>
+            <img id="overlay" src="" alt="Stream">
+            <div id="loading" class="hidden">Initializing camera...</div>
+        </div>
+        <div class="controls">
+            <button id="startBtn">▶️ Start Camera</button>
+            <button id="stopBtn" disabled>⏹ Stop</button>
+        </div>
+        <div class="results" id="results">
+            <div class="main-pred" id="mainPred">Waiting...</div>
+            <div class="model-table" id="modelTable"></div>
+        </div>
+    </div>
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>
