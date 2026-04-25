@@ -51,6 +51,7 @@ Final Prediction → Bounding Box Overlay
 
 ## 📁 Project Structure
 
+```bash
 mask-detector/
 ├── README.md # This documentation
 ├── requirements.txt # Python dependencies
@@ -79,7 +80,7 @@ mask-detector/
 └── static/
 ├── css/style.css # Styling
 └── js/app.js # WebSocket client & overlay
-
+```
 ---
 
 ## 🚀 Quick Start
