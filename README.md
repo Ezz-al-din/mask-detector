@@ -84,6 +84,44 @@ mask-detector/
 ├── css/style.css # Styling
 └── js/app.js # WebSocket client & overlay
 ```
+---
+## ⚡ Skip Training (If Models Are Already Trained)
+If you've already trained the models and have the `.pth` weight files, you **do not need to run `run_all.py`**. Just launch the inference server directly:
+
+1. **Verify Model Files**  
+   Ensure your `models/` folder contains these 3 files:
+   
+```bash
+   models/
+    ├── mobilenet_v2_mask.pth
+    ├── efficientnet_b0_mask.pth
+    └── custom_cnn_mask.pth
+```
+
+
+2. **Install Dependencies** (if not already done)
+```bash
+pip install -r requirements.txt
+```
+
+3. **Run Only the Server**
+```bash
+python server.py
+```
+4  **🌐 Open in Browser**
+
+Go to http://localhost:5000 → Click **"Start Camera"** → Allow permissions → Live predictions will appear instantly.
+
+
+
+---
+
+### ✅ Why This Works
+- `run_all.py` is just a wrapper that calls `download_data.py` → `train_models.py` → `server.py`
+- By running `python server.py` directly, you skip dataset prep & training entirely
+- `server.py` only loads existing `.pth` files from `models/` and starts the WebSocket server
+
+### 📌 Where It Fits in Your README Structure
 
 ---
 
