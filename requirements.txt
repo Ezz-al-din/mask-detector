@@ -1,0 +1,9 @@
+Flask
+Flask-SocketIO
+torch
+torchvision
+opencv-python-headless
+numpy
+gdown
+eventlet
+pillow
